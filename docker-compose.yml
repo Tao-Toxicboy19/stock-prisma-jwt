@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  nodeprisma:
+    image: postgres
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: production
+      POSTGRES_DB: stock
+      POSTGRES_PASSWORD: testpass123
+      POSTGRES_USER: postgres
+    ports:
+      - '3500:5432'
+    volumes:
+      - D:\Back-end-project\nest-stock\db:/var/lib/postgresql/data
