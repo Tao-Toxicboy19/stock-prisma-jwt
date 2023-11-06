@@ -12,4 +12,10 @@ export class AuthController {
     registerLoacl(@Body() dto: AuthDto): Promise<Auth> {
         return this.authService.registerLocal(dto)
     }
+
+    @HttpCode(HttpStatus.OK)
+    @Post('local/login')
+    loginLocal(@Body() dto: AuthDto) {
+        return this.authService.loginLocal(dto);
+    }
 }
