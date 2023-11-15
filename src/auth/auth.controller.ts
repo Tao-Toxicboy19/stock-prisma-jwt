@@ -23,7 +23,6 @@ export class AuthController {
         return this.authService.loginLocal(dto);
     }
 
-    @Public()
     @Patch(':id/upload')
     @UseInterceptors(FileInterceptor('file'))
     updateProfile(@UploadedFile() file: Express.Multer.File, @Param('id') id: number): Promise<string> {
