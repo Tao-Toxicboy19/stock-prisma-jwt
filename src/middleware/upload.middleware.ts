@@ -7,16 +7,16 @@ export class MulterConfigService implements MulterOptionsFactory {
   createMulterOptions(): MulterModuleOptions {
     return {
       storage: diskStorage({
-        destination: (req, file, cb) => {
+        destination: (req, file: Express.Multer.File, cb) => {
           cb(null, './src/upload');
         },
-        filename: (req, file, cb) => {
+        filename: (req, file: Express.Multer.File, cb) => {
           const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
           const fileExt = file.originalname.split('.').pop();
           cb(null, file.fieldname + '-' + uniqueSuffix + '.' + fileExt);
         },
       }),
-      fileFilter: (req, file, cb) => {
+      fileFilter: (req, file: Express.Multer.File, cb) => {
         const allowedExtensions = ['.jpg', '.jpeg', '.png', '.gif'];
         const fileExt = '.' + file.originalname.split('.').pop().toLowerCase();
 
