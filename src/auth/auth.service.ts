@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from './../prisma/prisma.service';
 import { AuthDto } from './dto';
-import { Auth, Token } from './type';
+import { User, Token } from './type';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 
@@ -12,7 +12,7 @@ export class AuthService {
         private jwtService: JwtService
     ) { }
 
-    async registerLocal(dto: AuthDto): Promise<Auth> {
+    async registerLocal(dto: AuthDto): Promise<User> {
         try {
             const hash = await bcrypt.hash(dto.password, 12)
             const newUser = await this.prisma.users.create({
@@ -48,5 +48,28 @@ export class AuthService {
         const tokens = { access_token: await this.jwtService.signAsync(payload) }
 
         return tokens
+    }
+
+    async updateProfile(file: Express.Multer.File, id: number): Promise<string> {
+        try {
+            const user = await this.prisma.users.findUnique({
+                where: { id: id },
+            });
+
+            if (!user) {
+                throw new NotFoundException('User not found');
+            }
+
+            await this.prisma.users.update({
+                where: { id: id },
+                data: {
+                    profile: file.filename,
+                },
+            });
+
+            return 'Profile updated successfully';
+        } catch (error) {
+            throw new Error(`Failed to update profile: ${error.message}`);
+        }
     }
 }

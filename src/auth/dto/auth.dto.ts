@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString,Matches } from "class-validator";
+import { IsNotEmpty, IsString, Matches, IsOptional } from 'class-validator';
 
 export class AuthDto {
     @IsNotEmpty()
@@ -8,7 +8,11 @@ export class AuthDto {
     @IsNotEmpty()
     @IsString()
     @Matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?=.*[a-zA-Z]).{8,}$/, {
-        message: 'Password must have @ * a A-Z'
+        message: 'Password must have @ * a A-Z',
     })
     password: string;
+
+    @IsOptional()
+    @IsString()
+    profile: string | null;
 }

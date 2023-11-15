@@ -4,6 +4,8 @@ import { AuthService } from './auth.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from 'src/constants';
+import { MulterModule } from '@nestjs/platform-express';
+import { MulterConfigService } from 'src/middleware/upload.middleware';
 
 @Module({
   imports: [
@@ -11,7 +13,11 @@ import { jwtConstants } from 'src/constants';
       global: true,
       secret: jwtConstants.secret,
       signOptions: { expiresIn: '3h' },
-    })],
+    }),
+    MulterModule.registerAsync({
+      useClass: MulterConfigService,
+    }),
+  ],
   controllers: [AuthController],
   providers: [AuthService, PrismaService]
 })
