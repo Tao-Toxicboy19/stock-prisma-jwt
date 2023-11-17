@@ -18,3 +18,19 @@ model Users {
   created_at DateTime @default(now())
   updated_at DateTime @default(now())
 }
+
+model Products {
+  id            Int          @id @default(autoincrement())
+  productImage  String
+  productName   String
+  // price         Int
+  // amount        Int
+  // productTypeId Int
+  // productType   ProductTypes @relation(fields: [productTypeId], references: [id])
+}
+
+// model ProductTypes {
+//   id              Int        @id @default(autoincrement())
+//   productTypeName String
+//   products        Products[]
+// }

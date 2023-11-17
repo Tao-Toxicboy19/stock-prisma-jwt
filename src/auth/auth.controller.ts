@@ -12,7 +12,7 @@ export class AuthController {
     @Public()
     @Post('local/register')
     @HttpCode(HttpStatus.CREATED)
-    registerLoacl(@Body() dto: AuthDto): Promise<User> {
+    registerLocal(@Body() dto: AuthDto): Promise<User> {
         return this.authService.registerLocal(dto)
     }
 
@@ -24,6 +24,7 @@ export class AuthController {
     }
 
     @Patch(':id/upload')
+    @HttpCode(HttpStatus.OK)
     @UseInterceptors(FileInterceptor('file'))
     updateProfile(@UploadedFile() file: Express.Multer.File, @Param('id') id: number): Promise<string> {
         return this.authService.updateProfile(file, +id);

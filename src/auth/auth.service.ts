@@ -59,7 +59,7 @@ export class AuthService {
             if (!user) {
                 throw new NotFoundException('User not found');
             }
-
+            console.log(file.filename)
             await this.prisma.users.update({
                 where: { id: id },
                 data: {
