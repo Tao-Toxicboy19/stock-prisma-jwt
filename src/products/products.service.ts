@@ -11,16 +11,15 @@ export class ProductsService {
         try {
             const newProduct = await this.prisma.products.create({
                 data: {
-                    productImage: file.originalname,
+                    productImage: file.filename,
                     productName: dto.productName,
-                    // price: dto.price,
-                    // amount: dto.amount,
-                    // productTypeId: dto.productTypeId
+                    price: +(dto.price),
+                    amount: +(dto.amount),
+                    productTypeId: +(dto.productTypeId)
                 }
             })
             return newProduct
         } catch (error) {
-            console.log(error.message)
             throw new Error(`Failed to update profile: ${error.message}`);
         }
     }
@@ -48,9 +47,9 @@ export class ProductsService {
                 data: {
                     productImage: file.filename,
                     productName: dto.productName,
-                    // price: dto.price,
-                    // amount: dto.amount,
-                    // productTypeId: dto.productTypeId
+                    price: +(dto.price),
+                    amount: +(dto.amount),
+                    productTypeId: +(dto.productTypeId)
                 }
             })
             return updateProduct

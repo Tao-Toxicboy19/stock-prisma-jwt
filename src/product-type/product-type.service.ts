@@ -7,16 +7,16 @@ import { ProductType } from './type';
 export class ProductTypeService {
     constructor(private prisma: PrismaService) { }
 
-    // async createProductType(dto: ProductTypeDto): Promise<ProductType> {
-    //     try {
-    //         const newProductType = await this.prisma.productTypes.create({
-    //             data: {
-    //                 productTypeName: dto.productTypeName
-    //             }
-    //         })
-    //         return newProductType
-    //     } catch (error) {
-    //         throw new Error("There are no products")
-    //     }
-    // }
+    async createProductType(dto: ProductTypeDto): Promise<ProductType> {
+        try {
+            const newProductType = await this.prisma.productTypes.create({
+                data: {
+                    productTypeName: dto.productTypeName
+                }
+            })
+            return newProductType
+        } catch (error) {
+            throw new Error("There are no products")
+        }
+    }
 }

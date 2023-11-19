@@ -9,15 +9,15 @@ export class ProductDto {
     @IsString()
     productImage: string;
 
-    // @IsNotEmpty()
-    // @IsNumber()
-    // price: number | null;
+    @IsNotEmpty()
+    @IsString()
+    price: string;
 
-    // @IsNotEmpty()
-    // @IsNumber()
-    // amount: number | null;
+    @IsNotEmpty()
+    @IsString()
+    amount: string;
 
-    // @IsNotEmpty()
-    // @IsNumber()
-    // productTypeId: number;
+    @IsNotEmpty()
+    @IsString()
+    productTypeId: string;
 }

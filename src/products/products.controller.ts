@@ -10,13 +10,14 @@ export class ProductsController {
     constructor(private productsService: ProductsService) { }
     
     @Public()
-    @Post('create')
+    @Post()
     @HttpCode(HttpStatus.CREATED)
     @UseInterceptors(FileInterceptor('file'))
-    createProduct(@Body() dto: ProductDto, @UploadedFile() file: Express.Multer.File) {
+    createProduct(@Body() dto: ProductDto, @UploadedFile() file: Express.Multer.File):Promise<Products> {
         return this.productsService.createProduct(dto, file)
     }
 
+    @Public()
     @Get()
     @HttpCode(HttpStatus.OK)
     findAllProducts(): Promise<Products[]> {

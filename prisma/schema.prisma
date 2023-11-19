@@ -23,14 +23,14 @@ model Products {
   id            Int          @id @default(autoincrement())
   productImage  String
   productName   String
-  // price         Int
-  // amount        Int
-  // productTypeId Int
-  // productType   ProductTypes @relation(fields: [productTypeId], references: [id])
+  price         Int
+  amount        Int
+  productTypeId Int
+  productType   ProductTypes @relation(fields: [productTypeId], references: [id])
 }
 
-// model ProductTypes {
-//   id              Int        @id @default(autoincrement())
-//   productTypeName String
-//   products        Products[]
-// }
+model ProductTypes {
+  id              Int        @id @default(autoincrement())
+  productTypeName String
+  products        Products[]
+}
