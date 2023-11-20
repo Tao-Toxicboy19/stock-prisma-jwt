@@ -34,3 +34,9 @@ model ProductTypes {
   productTypeName String
   products        Products[]
 }
+
+model Stocks {
+  id    Int    @id @default(autoincrement())
+  name  String
+  price Int
+}

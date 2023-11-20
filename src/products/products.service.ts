@@ -26,7 +26,11 @@ export class ProductsService {
 
     async findAllProducts(): Promise<Products[]> {
         try {
-            return await this.prisma.products.findMany()
+            return await this.prisma.products.findMany({
+                include: {
+                    productType: true
+                }
+            })
         } catch (error) {
             throw new Error('There are no products.')
         }
