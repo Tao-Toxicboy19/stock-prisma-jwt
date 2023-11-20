@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { StockDto } from './dto';
 import { Stock } from './type';
-import { CACHE_MANAGER, CacheKey, CacheTTL } from '@nestjs/cache-manager';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 
 
@@ -13,18 +13,14 @@ export class StockService {
         private prisma: PrismaService
     ) { }
 
-    async findAllStock(): Promise<any> {
+    async findAllStock(): Promise<Stock[] | unknown> {
         try {
-            const cachedValue = await this.cacheManager.get('test-cache');
-            if (cachedValue) {
-                console.log('hello cached value');
-                console.log('xxxx',cachedValue)
-                return { message: "from cache", stocks: cachedValue };
-            }
+            const cachedValue: unknown = await this.cacheManager.get('stock');
+            if (cachedValue) return { message: "from cache", cachedValue };
 
-            // const stocks = await this.prisma.stocks.findMany();
-            return 'hello from cache'
-            // return { message: "from database",cachedValue };
+            const stocks: Stock[] = await this.prisma.stocks.findMany();
+            return { message: "from database", stocks };
+
         } catch (error) {
             throw new Error(error);
         }
@@ -32,25 +28,22 @@ export class StockService {
 
     async createStock(dto: StockDto): Promise<Stock> {
         try {
-            const newStock = await this.prisma.stocks.create({
+            const newStock: Stock = await this.prisma.stocks.create({
                 data: {
                     name: dto.name,
-                    price: +(dto.price),
+                    price: +dto.price,
                 }
             });
 
-            const cachedValue = await this.cacheManager.get('stock');
-            let newData = []
+            const result: Stock[] = await this.cacheManager.get('stock');
 
-            if (cachedValue) {
-                console.log("cachedValue :", cachedValue)
+            if (result) {
+                const newResult: Stock[] = result.concat(newStock);
+                await this.cacheManager.set('stock', newResult);
             } else {
-                const result = await this.prisma.stocks.findMany()
-                console.log('hello')
-                await this.cacheManager.set('test-cache', result);
+                const result: Stock[] = await this.prisma.stocks.findMany();
+                await this.cacheManager.set('stock', result, 60000);
             }
-            // const data = await this.cacheManager.get('stock');
-            // console.log(data)
 
             return newStock
 

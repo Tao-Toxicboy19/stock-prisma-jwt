@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, UseInterceptors } from '@nestjs/common';
 import { StockService } from './stock.service';
 import { Public } from 'src/common/decorators/pubilc.decorator';
 import { Stock } from './type';
@@ -9,8 +9,7 @@ export class StockController {
     constructor(private stockService: StockService) { }
 
     @Public()
-    @Get('hello3')
-    // @Get()
+    @Get()
     @HttpCode(HttpStatus.OK)
     findAllStock(): Promise<Stock[] | unknown> {
         return this.stockService.findAllStock()
