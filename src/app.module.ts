@@ -13,6 +13,7 @@ import { redisStore } from 'cache-manager-redis-yet';
   imports: [
     CacheModule.register({
       isGlobal: true,
+      ttl: 100000,
       store: redisStore,
       host: 'localhost',
       port: 6379,
