@@ -6,7 +6,6 @@ import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { AuthGuard } from './common/guard/auth.guard';
 import { ProductsModule } from './products/products.module';
 import { ProductTypeModule } from './product-type/product-type.module';
-import { StockModule } from './stock/stock.module';
 
 @Module({
   imports: [
@@ -15,7 +14,6 @@ import { StockModule } from './stock/stock.module';
     AuthModule,
     ProductsModule,
     ProductTypeModule,
-    StockModule,
   ],
   controllers: [],
   providers: [

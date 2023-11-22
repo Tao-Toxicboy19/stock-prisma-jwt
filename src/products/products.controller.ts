@@ -8,32 +8,32 @@ import { Public } from 'src/common/decorators/pubilc.decorator';
 @Controller('products')
 export class ProductsController {
     constructor(private productsService: ProductsService) { }
-    
+
     @Public()
     @Post()
     @HttpCode(HttpStatus.CREATED)
     @UseInterceptors(FileInterceptor('file'))
-    createProduct(@Body() dto: ProductDto, @UploadedFile() file: Express.Multer.File):Promise<Products> {
+    createProduct(@Body() dto: ProductDto, @UploadedFile() file: Express.Multer.File): Promise<Products> {
         return this.productsService.createProduct(dto, file)
     }
 
     @Public()
     @Get()
     @HttpCode(HttpStatus.OK)
-    findAllProducts(): Promise<Products[]> {
+    findAllProducts(): Promise<Products[] | unknown> {
         return this.productsService.findAllProducts()
     }
 
     @Get()
     @HttpCode(HttpStatus.OK)
-    findOneProduct(@Param() id: number): Promise<Products> {
+    findOneProduct(@Param() id: number): Promise<Products | unknown> {
         return this.productsService.findOneProducts(+id)
     }
 
     @Put()
     @HttpCode(HttpStatus.CREATED)
     @UseInterceptors(FileInterceptor('file'))
-    updateProduct(@Param() id: number, @Body() dto: ProductDto, @UploadedFile() file: Express.Multer.File): Promise<Products> {
+    updateProduct(@Param() id: number, @Body() dto: ProductDto, @UploadedFile() file: Express.Multer.File): Promise<Products | unknown> {
         return this.productsService.updateProduct(dto, file, +id)
     }
 
