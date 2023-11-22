@@ -1,32 +1,24 @@
-# Use an official Node.js LTS (Long-Term Support) runtime as a parent image
-FROM node:lts AS build
-
-# Set the working directory in the container
-WORKDIR /app
-
-# Copy package.json and package-lock.json to the container
+# Stage 1: Build Stage
+FROM node:18 as build
+WORKDIR /usr/src/app
 COPY package*.json ./
-
-# Install app dependencies
-RUN npm install
-
-# Copy the rest of the app source
+COPY yarn.lock ./
+RUN yarn install
 COPY . .
+RUN npx prisma generate
+RUN yarn build
 
-# Build your Nest.js app (if necessary)
-# RUN npm run build
+# Stage 2: Production Stage
+FROM node:18
+RUN apt update && apt install libssl-dev dumb-init -y --no-install-recommends
+WORKDIR /usr/src/app
+COPY --chown=node:node --from=build /usr/src/app/dist ./dist
+COPY --chown=node:node --from=build /usr/src/app/.env .env
+COPY --chown=node:node --from=build /usr/src/app/package*.json ./
+COPY --chown=node:node --from=build /usr/src/app/yarn.lock ./
+RUN yarn install --production
+COPY --chown=node:node --from=build /usr/src/app/node_modules/.prisma/client  ./node_modules/.prisma/client
 
-# Create a new image that uses a minimal runtime
-FROM node:lts-slim
-
-# Set the working directory in the new container
-WORKDIR /app
-
-# Copy the app files from the previous build stage
-COPY --from=build /app ./
-
-# Expose the port on which your Nest.js app will run
-EXPOSE 30
-
-# Define the command to start your Nest.js app
-CMD [ "npm", "start" ]
+ENV NODE_ENV production
+EXPOSE 8080
+CMD ["yarn", "start:prod"]  

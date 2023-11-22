@@ -15,10 +15,11 @@ export class StockService {
 
     async findAllStock(): Promise<Stock[] | unknown> {
         try {
-            const cachedValue: unknown = await this.cacheManager.get('stock');
-            if (cachedValue) return { message: "from cache", cachedValue };
+            const result: unknown = await this.cacheManager.get('stock');
+            if (result) return { message: "from cache", result };
 
             const stocks: Stock[] = await this.prisma.stocks.findMany();
+            await this.cacheManager.set('stock', stocks, 60000)
             return { message: "from database", stocks };
 
         } catch (error) {
@@ -39,7 +40,7 @@ export class StockService {
 
             if (result) {
                 const newResult: Stock[] = result.concat(newStock);
-                await this.cacheManager.set('stock', newResult);
+                await this.cacheManager.set('stock', newResult, 60000);
             } else {
                 const result: Stock[] = await this.prisma.stocks.findMany();
                 await this.cacheManager.set('stock', result, 60000);
