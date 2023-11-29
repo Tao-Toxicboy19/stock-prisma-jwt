@@ -9,7 +9,7 @@ export class ProductTypeService {
 
     async createProductType(dto: ProductTypeDto): Promise<ProductType> {
         try {
-            const newProductType = await this.prisma.productTypes.create({
+            const newProductType: ProductType = await this.prisma.productTypes.create({
                 data: {
                     productTypeName: dto.productTypeName
                 }
